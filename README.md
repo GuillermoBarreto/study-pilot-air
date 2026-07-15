@@ -9,6 +9,7 @@ A practical study companion for students who want a clearer way to organize clas
 - Generates a simple study plan for any topic
 - Creates quick practice questions for review
 - Offers course-focused study tips for class preparation
+- Builds a short weekly plan for upcoming coursework
 - Breaks long reading material into short, easier-to-follow points
 - Provides a lightweight web dashboard for everyday studying
 
@@ -22,6 +23,8 @@ A practical study companion for students who want a clearer way to organize clas
 ## Run locally
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt -r requirements-dev.txt
 python3 -m uvicorn app.main:app --reload
 ```
@@ -58,7 +61,7 @@ curl -X POST http://127.0.0.1:8000/zybooks \
 
 ## Project goal
 
-This project is designed to grow into a practical study companion for college students, especially for class prep, reading review, and quick study sessions.
+This project is designed to grow into a practical study companion for college students, especially for class prep, reading review, weekly planning, and faster study sessions.
 
 ## Copyright and licensing
 
