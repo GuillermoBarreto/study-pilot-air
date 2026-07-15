@@ -19,6 +19,13 @@ def test_generate_study_plan():
     assert data["days"][0]["focus"] == "Core syntax and variables"
 
 
+def test_dashboard_route():
+    response = client.get("/dashboard")
+
+    assert response.status_code == 200
+    assert "Study Pilot" in response.text
+
+
 def test_rejects_invalid_days():
     response = client.post(
         "/study-plan",

@@ -91,6 +91,11 @@ def read_root():
     return FileResponse(INDEX_HTML, media_type="text/html")
 
 
+@app.get("/dashboard", response_class=FileResponse)
+def read_dashboard():
+    return FileResponse(INDEX_HTML, media_type="text/html")
+
+
 @app.get("/courses")
 def get_courses():
     return {"courses": COURSES}
