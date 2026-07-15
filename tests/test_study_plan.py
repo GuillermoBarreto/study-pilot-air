@@ -52,3 +52,17 @@ def test_generate_course_guidance():
     assert data["course"] == "CS 101"
     assert data["topic"] == "Functions"
     assert len(data["study_tips"]) >= 2
+
+
+def test_generate_weekly_plan():
+    response = client.post(
+        "/weekly-plan",
+        json={"course": "CS 101", "goal": "Prepare for midterms", "days": 3},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["course"] == "CS 101"
+    assert data["goal"] == "Prepare for midterms"
+    assert len(data["schedule"]) == 3
+    assert data["schedule"][0]["task"].startswith("Review")

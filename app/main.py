@@ -59,6 +59,23 @@ class CourseGuidanceResponse(BaseModel):
     study_tips: List[str]
 
 
+class WeeklyPlanRequest(BaseModel):
+    course: str = Field(..., min_length=1)
+    goal: str = Field(..., min_length=1)
+    days: int = Field(..., gt=0)
+
+
+class WeeklyPlanItem(BaseModel):
+    day: str
+    task: str
+
+
+class WeeklyPlanResponse(BaseModel):
+    course: str
+    goal: str
+    schedule: List[WeeklyPlanItem]
+
+
 class ZyBooksRequest(BaseModel):
     text: str = Field(..., min_length=1)
 
@@ -140,6 +157,22 @@ def generate_course_guidance(request: CourseGuidanceRequest):
             f"Create a short summary sheet for {request.topic} to review before exams.",
         ],
     )
+
+
+@app.post("/weekly-plan", response_model=WeeklyPlanResponse)
+def generate_weekly_plan(request: WeeklyPlanRequest):
+    tasks = [
+        "Review notes and identify the main ideas",
+        "Practice one example problem and write out the steps",
+        "Summarize the topic in your own words before class",
+    ]
+
+    schedule = [
+        WeeklyPlanItem(day=f"Day {index + 1}", task=tasks[index % len(tasks)])
+        for index in range(request.days)
+    ]
+
+    return WeeklyPlanResponse(course=request.course, goal=request.goal, schedule=schedule)
 
 
 @app.post("/zybooks", response_model=ZyBooksResponse)

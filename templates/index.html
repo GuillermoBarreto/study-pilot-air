@@ -38,11 +38,27 @@
         </div>
 
         <div class="card">
+          <h2>Build a weekly plan</h2>
+          <input id="weeklyCourse" placeholder="Course" value="CS 101" />
+          <input id="weeklyGoal" placeholder="Goal" value="Prepare for midterms" />
+          <input id="weeklyDays" type="number" placeholder="Days" value="3" />
+          <button onclick="generateWeeklyPlan()">Create Plan</button>
+          <pre id="weeklyPlanResult"></pre>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top: 1rem;">
+        <div class="card">
           <h2>Summarize ZyBooks content</h2>
           <textarea id="zybookText" rows="8" placeholder="Paste chapter text here..."></textarea>
           <button onclick="summarizeText()">Summarize</button>
           <pre id="summaryResult"></pre>
         </div>
+      </div>
+
+      <div class="card" style="margin-top: 1rem;">
+        <div class="pill">Project note</div>
+        <p>Study Pilot is built to help with coursework, course prep, reading review, and weekly study planning in a simple, practical way.</p>
       </div>
     </div>
 
@@ -81,6 +97,21 @@
 
         const data = await response.json();
         document.getElementById('summaryResult').textContent = JSON.stringify(data, null, 2);
+      }
+
+      async function generateWeeklyPlan() {
+        const course = document.getElementById('weeklyCourse').value;
+        const goal = document.getElementById('weeklyGoal').value;
+        const days = Number(document.getElementById('weeklyDays').value);
+
+        const response = await fetch('/weekly-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ course, goal, days })
+        });
+
+        const data = await response.json();
+        document.getElementById('weeklyPlanResult').textContent = JSON.stringify(data, null, 2);
       }
     </script>
   </body>
