@@ -59,3 +59,8 @@ curl -X POST http://127.0.0.1:8000/zybooks \
 ## Project goal
 
 This project is designed to grow into a practical study companion for college students, especially for class prep, reading review, and quick study sessions.
+
+## Copyright and licensing
+
+This project is the intellectual property of Guillermo Barreto. All rights reserved.
+See [LICENSE](LICENSE) and [NOTICE](NOTICE) for details.
