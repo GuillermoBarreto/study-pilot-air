@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Pilot AI</title>
+    <link rel="stylesheet" href="/static/app.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="hero">
+        <h1>Study Pilot AI</h1>
+        <p>Built for Western classes, ZyBooks reading, and faster study sessions.</p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="pill">Today’s focus</div>
+          <div class="focus-box">
+            <strong>CS 101</strong><br />Review functions and practice one example problem before class.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="pill">Your classes</div>
+          <ul id="courseList"></ul>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top: 1rem;">
+        <div class="card">
+          <h2>Generate a study plan</h2>
+          <input id="topic" placeholder="Topic" value="Functions" />
+          <input id="days" type="number" placeholder="Days" value="3" />
+          <input id="hours" type="number" placeholder="Hours per day" value="2" />
+          <button onclick="generatePlan()">Generate Plan</button>
+          <pre id="planResult"></pre>
+        </div>
+
+        <div class="card">
+          <h2>Summarize ZyBooks content</h2>
+          <textarea id="zybookText" rows="8" placeholder="Paste chapter text here..."></textarea>
+          <button onclick="summarizeText()">Summarize</button>
+          <pre id="summaryResult"></pre>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function loadCourses() {
+        const response = await fetch('/courses');
+        const data = await response.json();
+        const list = document.getElementById('courseList');
+        list.innerHTML = data.courses.map(course => `<li><strong>${course.name}</strong> — ${course.topic}</li>`).join('');
+      }
+
+      async function generatePlan() {
+        const topic = document.getElementById('topic').value;
+        const days = Number(document.getElementById('days').value);
+        const hours = Number(document.getElementById('hours').value);
+
+        const response = await fetch('/study-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ topic, days, hours_per_day: hours })
+        });
+
+        const data = await response.json();
+        document.getElementById('planResult').textContent = JSON.stringify(data, null, 2);
+      }
+
+      loadCourses();
+
+      async function summarizeText() {
+        const text = document.getElementById('zybookText').value;
+        const response = await fetch('/zybooks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+
+        const data = await response.json();
+        document.getElementById('summaryResult').textContent = JSON.stringify(data, null, 2);
+      }
+    </script>
+  </body>
+</html>

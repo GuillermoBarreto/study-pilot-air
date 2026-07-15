@@ -1,12 +1,17 @@
+from pathlib import Path
 from typing import List
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
+from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
 
 app = FastAPI(title="Study Pilot AI")
 helper = ZyBooksHelper()
+INDEX_HTML = Path(__file__).resolve().parent.parent / "templates" / "index.html"
+STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
 
 class StudyPlanRequest(BaseModel):
@@ -64,9 +69,19 @@ class ZyBooksResponse(BaseModel):
     quick_questions: List[QuizQuestion]
 
 
-@app.get("/")
+@app.get("/", response_class=FileResponse)
 def read_root():
-    return {"message": "Study Pilot AI is running"}
+    return FileResponse(INDEX_HTML, media_type="text/html")
+
+
+@app.get("/courses")
+def get_courses():
+    return {"courses": COURSES}
+
+
+@app.get("/static/{filename}")
+def get_static(filename: str):
+    return FileResponse(STATIC_DIR / filename)
 
 
 @app.post("/study-plan", response_model=StudyPlanResponse)
