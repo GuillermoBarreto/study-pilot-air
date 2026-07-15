@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
 
-app = FastAPI(title="Study Pilot AI")
+app = FastAPI(title="Study Pilot")
 helper = ZyBooksHelper()
 INDEX_HTML = Path(__file__).resolve().parent.parent / "templates" / "index.html"
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
