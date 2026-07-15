@@ -1,20 +1,20 @@
-# Study Pilot AI
+# Study Pilot
 
-Study Pilot AI is a personal study assistant built for students who want help organizing classes, preparing for quizzes, and breaking down dense reading material from platforms like ZyBooks.
+Study Pilot is a simple study helper built for students who want a clearer way to organize classes, prepare for quizzes, and make dense reading material easier to work through.
 
 ## What it does
 
 - Generates a simple study plan for any topic
-- Creates quick quiz questions for practice
-- Provides course-focused study tips for class preparation
-- Summarizes long reading text into short, digestible points
-- Offers a lightweight web dashboard for everyday studying
+- Creates quick practice questions for review
+- Offers course-focused study tips for class preparation
+- Breaks long reading material into short, easier-to-follow points
+- Provides a lightweight web dashboard for everyday studying
 
 ## Tech stack
 
 - FastAPI for the backend API
-- Python for the core app logic
-- HTML/CSS for the browser-based dashboard
+- Python for the app logic
+- HTML/CSS for the browser dashboard
 - Pytest for automated tests
 
 ## Run locally
@@ -46,7 +46,7 @@ curl -X POST http://127.0.0.1:8000/study-plan \
   -d '{"topic":"Functions","days":3,"hours_per_day":2}'
 ```
 
-### Summarize ZyBooks-style content
+### Summarize reading content
 
 ```bash
 curl -X POST http://127.0.0.1:8000/zybooks \
@@ -56,4 +56,4 @@ curl -X POST http://127.0.0.1:8000/zybooks \
 
 ## Project goal
 
-This project is designed to grow into a practical AI study companion for college students, especially for class prep, reading comprehension, and quick review sessions.
+This project is designed to grow into a practical study companion for college students, especially for class prep, reading review, and quick study sessions.
