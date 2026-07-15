@@ -1,6 +1,6 @@
 # Study Pilot
 
-Study Pilot is a simple study helper built for students who want a clearer way to organize classes, prepare for quizzes, and make dense reading material easier to work through.
+A practical study companion for students who want a clearer way to organize classes, prepare for quizzes, and make dense reading material easier to work through.
 
 ## What it does
 
