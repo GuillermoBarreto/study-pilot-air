@@ -2,6 +2,8 @@
 
 A practical study companion for students who want a clearer way to organize classes, prepare for quizzes, and make dense reading material easier to work through.
 
+![Study Pilot Dashboard](https://via.placeholder.com/1200x600.png?text=Study+Pilot+Dashboard)
+
 ## What it does
 
 - Generates a simple study plan for any topic
