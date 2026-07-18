@@ -5,11 +5,13 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
+from app.ai_helper import StudyAI, string_list
 from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
 
 app = FastAPI(title="Study Pilot")
 helper = ZyBooksHelper()
+ai = StudyAI()
 INDEX_HTML = Path(__file__).resolve().parent.parent / "templates" / "index.html"
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
@@ -77,7 +79,7 @@ class WeeklyPlanResponse(BaseModel):
 
 
 class ZyBooksRequest(BaseModel):
-    text: str = Field(..., min_length=1)
+    text: str = Field(..., min_length=1, max_length=12000)
 
 
 class ZyBooksResponse(BaseModel):
@@ -108,6 +110,22 @@ def get_static(filename: str):
 
 @app.post("/study-plan", response_model=StudyPlanResponse)
 def generate_study_plan(request: StudyPlanRequest):
+    ai_result = ai.generate_json(
+        "Create a practical study plan. Return JSON with a 'days' array. Each item must have "
+        "'title', 'focus', and 'goal' strings. Create exactly the requested number of days.",
+        f"Topic: {request.topic}\nDays: {request.days}\nHours per day: {request.hours_per_day}",
+    )
+    ai_days = ai_result.get("days") if ai_result else None
+    if isinstance(ai_days, list) and len(ai_days) == request.days:
+        try:
+            return StudyPlanResponse(
+                topic=request.topic,
+                hours_per_day=request.hours_per_day,
+                days=[StudyDay(**day) for day in ai_days],
+            )
+        except (TypeError, ValueError):
+            pass
+
     focuses = [
         "Core syntax and variables",
         "Control flow and functions",
@@ -134,6 +152,19 @@ def generate_study_plan(request: StudyPlanRequest):
 
 @app.post("/quiz", response_model=QuizResponse)
 def generate_quiz(request: QuizRequest):
+    ai_result = ai.generate_json(
+        "Create a multiple-choice quiz. Return JSON with a 'questions' array. Each item must "
+        "have 'question', 'answer', and 'options'. Options must be an array of exactly 3 strings "
+        "and include the answer. Create exactly the requested number of questions.",
+        f"Topic: {request.topic}\nQuestions: {request.questions}",
+    )
+    ai_questions = ai_result.get("questions") if ai_result else None
+    if isinstance(ai_questions, list) and len(ai_questions) == request.questions:
+        try:
+            return QuizResponse(topic=request.topic, questions=[QuizQuestion(**item) for item in ai_questions])
+        except (TypeError, ValueError):
+            pass
+
     return QuizResponse(
         topic=request.topic,
         questions=[
@@ -153,6 +184,14 @@ def generate_quiz(request: QuizRequest):
 
 @app.post("/course-guidance", response_model=CourseGuidanceResponse)
 def generate_course_guidance(request: CourseGuidanceRequest):
+    ai_result = ai.generate_json(
+        "Give concise, actionable study advice. Return JSON with a 'study_tips' array of 3 strings.",
+        f"Course: {request.course}\nTopic: {request.topic}",
+    )
+    ai_tips = string_list(ai_result.get("study_tips")) if ai_result else None
+    if ai_tips:
+        return CourseGuidanceResponse(course=request.course, topic=request.topic, study_tips=ai_tips)
+
     return CourseGuidanceResponse(
         course=request.course,
         topic=request.topic,
@@ -166,6 +205,22 @@ def generate_course_guidance(request: CourseGuidanceRequest):
 
 @app.post("/weekly-plan", response_model=WeeklyPlanResponse)
 def generate_weekly_plan(request: WeeklyPlanRequest):
+    ai_result = ai.generate_json(
+        "Create a practical weekly study schedule. Return JSON with a 'schedule' array. Each item "
+        "must have a 'day' and 'task' string. Create exactly the requested number of items.",
+        f"Course: {request.course}\nGoal: {request.goal}\nDays: {request.days}",
+    )
+    ai_schedule = ai_result.get("schedule") if ai_result else None
+    if isinstance(ai_schedule, list) and len(ai_schedule) == request.days:
+        try:
+            return WeeklyPlanResponse(
+                course=request.course,
+                goal=request.goal,
+                schedule=[WeeklyPlanItem(**item) for item in ai_schedule],
+            )
+        except (TypeError, ValueError):
+            pass
+
     tasks = [
         "Review notes and identify the main ideas",
         "Practice one example problem and write out the steps",
@@ -182,6 +237,26 @@ def generate_weekly_plan(request: WeeklyPlanRequest):
 
 @app.post("/zybooks", response_model=ZyBooksResponse)
 def summarize_zybooks_content(request: ZyBooksRequest):
+    ai_result = ai.generate_json(
+        "Summarize this course reading for a student. Return JSON with 'summary' (a concise string), "
+        "'key_concepts' (up to 8 strings), and 'quick_questions' (exactly 2 items). Each question "
+        "must have 'question', 'answer', and 'options'; options must be 3 strings including the answer.",
+        request.text,
+    )
+    if ai_result:
+        concepts = string_list(ai_result.get("key_concepts"))
+        questions = ai_result.get("quick_questions")
+        summary = ai_result.get("summary")
+        if isinstance(summary, str) and concepts and isinstance(questions, list) and len(questions) == 2:
+            try:
+                return ZyBooksResponse(
+                    summary=summary.strip(),
+                    key_concepts=concepts,
+                    quick_questions=[QuizQuestion(**question) for question in questions],
+                )
+            except (TypeError, ValueError):
+                pass
+
     return ZyBooksResponse(
         summary=helper.summarize_text(request.text),
         key_concepts=helper.extract_key_concepts(request.text),

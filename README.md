@@ -45,9 +45,9 @@ python3 -m uvicorn app.main:app --reload
 
 ## OpenAI-powered study help
 
-Study Pilot Air is being prepared to use the OpenAI Responses API for richer,
-course-specific study plans, quizzes, and reading summaries. The app will keep
-its built-in study helpers available as a fallback when an API key is not set.
+Study Pilot Air uses the OpenAI Responses API for richer, course-specific study
+plans, quizzes, course guidance, and reading summaries. If an API key is not
+set or the service is unavailable, it keeps working with built-in study helpers.
 
 When the integration is enabled, create an API key in the OpenAI dashboard and
 store it only in your local environment—never commit it to the repository.

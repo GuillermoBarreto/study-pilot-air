@@ -48,6 +48,30 @@ def test_generate_quiz():
     assert data["questions"][0]["answer"] in data["questions"][0]["options"]
 
 
+def test_generate_quiz_uses_valid_ai_response(monkeypatch):
+    monkeypatch.setattr(
+        "app.main.ai.generate_json",
+        lambda *_: {
+            "questions": [
+                {
+                    "question": "What does a function do?",
+                    "answer": "It organizes reusable code",
+                    "options": [
+                        "It organizes reusable code",
+                        "It deletes every variable",
+                        "It only creates a loop",
+                    ],
+                }
+            ]
+        },
+    )
+
+    response = client.post("/quiz", json={"topic": "Functions", "questions": 1})
+
+    assert response.status_code == 200
+    assert response.json()["questions"][0]["answer"] == "It organizes reusable code"
+
+
 def test_generate_course_guidance():
     response = client.post(
         "/course-guidance",
