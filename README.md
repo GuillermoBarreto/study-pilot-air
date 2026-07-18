@@ -20,8 +20,8 @@ The goal is to help students spend less time organizing and more time learning.
 ## What it does
 
 - 📅 Personalized study plans
-- 🧠 AI-powered quiz generation
-- 📚 Reading summaries
+- 🧠 Quiz generation and practice questions
+- 📚 Reading summaries and key-concept extraction
 - ✍️ Course-focused study recommendations
 - 📊 Weekly study planner
 - 💻 Clean and responsive dashboard
@@ -43,6 +43,27 @@ pip install -r requirements.txt -r requirements-dev.txt
 python3 -m uvicorn app.main:app --reload
 ```
 
+## OpenAI-powered study help
+
+Study Pilot Air is being prepared to use the OpenAI Responses API for richer,
+course-specific study plans, quizzes, and reading summaries. The app will keep
+its built-in study helpers available as a fallback when an API key is not set.
+
+When the integration is enabled, create an API key in the OpenAI dashboard and
+store it only in your local environment—never commit it to the repository.
+
+**Windows PowerShell**
+
+```powershell
+setx OPENAI_API_KEY "your_api_key_here"
+```
+
+Open a new terminal after running that command, then start the application as
+usual. The OpenAI Python SDK reads `OPENAI_API_KEY` automatically.
+
+For deployment, configure the same variable in your hosting provider's secret
+manager rather than placing it in a source file or browser code.
+
 ## Start with the launcher script
 
 ```bash
@@ -54,6 +75,9 @@ python3 -m uvicorn app.main:app --reload
 ```bash
 pytest -q
 ```
+
+GitHub Actions runs this test suite automatically for pull requests and pushes
+to `main` and agent branches.
 
 ## Example API usage
 
