@@ -7,8 +7,7 @@
 
 A practical study companion for students who want a clearer way to organize classes, prepare for quizzes, and make dense reading material easier to work through.
 
-![Study Pilot Dashboard](https://via.placeholder.com/1200x600.png?text=Study+Pilot+Dashboard)
-
+![Study Pilot Dashboard](https://images.unsplash.com/photo-1522202176988-66273c2fd55e)
 ## Why Study Pilot Air?
 
 Studying shouldn't mean juggling multiple apps, notes, and AI tools.
