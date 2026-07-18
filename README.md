@@ -1,18 +1,32 @@
-# Study Pilot
+# 🚀 Study Pilot Air
+
+![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-Framework-009688?logo=fastapi)
+![License](https://img.shields.io/badge/License-Custom-lightgrey)
+![Status](https://img.shields.io/badge/Status-In%20Development-success)
 
 A practical study companion for students who want a clearer way to organize classes, prepare for quizzes, and make dense reading material easier to work through.
 
 ![Study Pilot Dashboard](https://via.placeholder.com/1200x600.png?text=Study+Pilot+Dashboard)
 
+## Why Study Pilot Air?
+
+Studying shouldn't mean juggling multiple apps, notes, and AI tools.
+
+Study Pilot Air brings everything together into one place—from planning study sessions to generating practice questions and summarizing reading material.
+
+The goal is to help students spend less time organizing and more time learning.
+
 ## What it does
 
-- Generates a simple study plan for any topic
-- Creates quick practice questions for review
-- Offers course-focused study tips for class preparation
-- Builds a short weekly plan for upcoming coursework
-- Breaks long reading material into short, easier-to-follow points
-- Provides a lightweight web dashboard for everyday studying
-
+- 📅 Personalized study plans
+- 🧠 AI-powered quiz generation
+- 📚 Reading summaries
+- ✍️ Course-focused study recommendations
+- 📊 Weekly study planner
+- 💻 Clean and responsive dashboard
+- ⚡ FastAPI REST API
+  
 ## Tech stack
 
 - FastAPI for the backend API
