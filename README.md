@@ -7,6 +7,9 @@
 
 A practical study companion for students who want a clearer way to organize classes, prepare for quizzes, and make dense reading material easier to work through.
 
+> **Project status:** MVP foundation. The current app has no user accounts or
+> database yet; see the [roadmap](docs/ROADMAP.md) for the product plan.
+
 ![Study Pilot Air](https://dummyimage.com/1200x600/0f172a/ffffff&text=Study+Pilot+Air)
 
 ## Why Study Pilot Air?
@@ -34,6 +37,14 @@ The goal is to help students spend less time organizing and more time learning.
 - HTML/CSS for the browser dashboard
 - Pytest for automated tests
 
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Deployment guide](docs/DEPLOYMENT.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+- [Product roadmap](docs/ROADMAP.md)
+
 ## Run locally
 
 ```bash
@@ -42,6 +53,9 @@ source .venv/bin/activate
 pip install -r requirements.txt -r requirements-dev.txt
 python3 -m uvicorn app.main:app --reload
 ```
+
+On Windows PowerShell, activate the environment with
+`\.venv\Scripts\Activate.ps1` and start with `uvicorn app.main:app --reload`.
 
 ## OpenAI-powered study help
 
