@@ -8,15 +8,19 @@
   </head>
   <body>
     <div class="page">
-      <div class="hero">
-        <h1>Study Pilot</h1>
-        <p>A simple study companion for coursework, reading review, and steady study sessions.</p>
-      </div>
+      <header class="hero">
+        <div>
+          <p class="eyebrow">YOUR STUDY COMPANION</p>
+          <h1>Study Pilot</h1>
+          <p>Turn coursework into focused, manageable study sessions.</p>
+        </div>
+        <div class="hero-stat"><strong>One step at a time</strong><span>Plan. Practice. Progress.</span></div>
+      </header>
 
       <div class="grid">
         <div class="card">
           <div class="pill">Today’s focus</div>
-          <div class="focus-box">
+          <div class="focus-box" id="todayFocus">
             <strong>CS 101</strong><br />Review functions and practice one example problem before class.
           </div>
         </div>
@@ -33,8 +37,8 @@
           <input id="topic" placeholder="Topic" value="Functions" />
           <input id="days" type="number" placeholder="Days" value="3" />
           <input id="hours" type="number" placeholder="Hours per day" value="2" />
-          <button onclick="generatePlan()">Generate Plan</button>
-          <pre id="planResult"></pre>
+          <button onclick="generatePlan()">Generate plan</button>
+          <div class="result" id="planResult" aria-live="polite"></div>
         </div>
 
         <div class="card">
@@ -42,8 +46,8 @@
           <input id="weeklyCourse" placeholder="Course" value="CS 101" />
           <input id="weeklyGoal" placeholder="Goal" value="Prepare for midterms" />
           <input id="weeklyDays" type="number" placeholder="Days" value="3" />
-          <button onclick="generateWeeklyPlan()">Create Plan</button>
-          <pre id="weeklyPlanResult"></pre>
+          <button onclick="generateWeeklyPlan()">Create plan</button>
+          <div class="result" id="weeklyPlanResult" aria-live="polite"></div>
         </div>
       </div>
 
@@ -52,7 +56,16 @@
           <h2>Summarize ZyBooks content</h2>
           <textarea id="zybookText" rows="8" placeholder="Paste chapter text here..."></textarea>
           <button onclick="summarizeText()">Summarize</button>
-          <pre id="summaryResult"></pre>
+          <div class="result" id="summaryResult" aria-live="polite"></div>
+        </div>
+
+        <div class="card">
+          <h2>Practice with a quiz</h2>
+          <p class="card-copy">Build a short set of questions for any topic.</p>
+          <input id="quizTopic" placeholder="Topic" value="Functions" />
+          <input id="quizQuestions" type="number" min="1" max="10" placeholder="Number of questions" value="3" />
+          <button onclick="generateQuiz()">Generate quiz</button>
+          <div class="result" id="quizResult" aria-live="polite"></div>
         </div>
       </div>
 
@@ -63,11 +76,44 @@
     </div>
 
     <script>
-      async function loadCourses() {
-        const response = await fetch('/courses');
+      function escapeHtml(value) {
+        const element = document.createElement('div');
+        element.textContent = value;
+        return element.innerHTML;
+      }
+
+      function setResult(id, content, isError = false) {
+        const element = document.getElementById(id);
+        element.className = `result ${isError ? 'error' : ''}`;
+        element.innerHTML = content;
+      }
+
+      async function request(url, body) {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
         const data = await response.json();
-        const list = document.getElementById('courseList');
-        list.innerHTML = data.courses.map(course => `<li><strong>${course.name}</strong> — ${course.topic}</li>`).join('');
+        if (!response.ok) {
+          throw new Error(data.detail?.[0]?.msg || 'Something went wrong. Please check your inputs and try again.');
+        }
+        return data;
+      }
+
+      async function loadCourses() {
+        try {
+          const response = await fetch('/courses');
+          const data = await response.json();
+          const list = document.getElementById('courseList');
+          list.innerHTML = data.courses.map(course => `<li><strong>${escapeHtml(course.name)}</strong><span>${escapeHtml(course.topic)}</span></li>`).join('');
+          const firstCourse = data.courses[0];
+          if (firstCourse) {
+            document.getElementById('todayFocus').innerHTML = `<strong>${escapeHtml(firstCourse.name)}</strong><br />${escapeHtml(firstCourse.focus)}`;
+          }
+        } catch (error) {
+          document.getElementById('courseList').innerHTML = '<li>Courses are unavailable right now.</li>';
+        }
       }
 
       async function generatePlan() {
@@ -75,28 +121,24 @@
         const days = Number(document.getElementById('days').value);
         const hours = Number(document.getElementById('hours').value);
 
-        const response = await fetch('/study-plan', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ topic, days, hours_per_day: hours })
-        });
-
-        const data = await response.json();
-        document.getElementById('planResult').textContent = JSON.stringify(data, null, 2);
+        try {
+          const data = await request('/study-plan', { topic, days, hours_per_day: hours });
+          setResult('planResult', `<h3>${escapeHtml(data.topic)} <span>· ${data.hours_per_day} hr/day</span></h3><ol>${data.days.map(day => `<li><strong>${escapeHtml(day.title)}: ${escapeHtml(day.focus)}</strong><span>${escapeHtml(day.goal)}</span></li>`).join('')}</ol>`);
+        } catch (error) {
+          setResult('planResult', escapeHtml(error.message), true);
+        }
       }
 
       loadCourses();
 
       async function summarizeText() {
         const text = document.getElementById('zybookText').value;
-        const response = await fetch('/zybooks', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text })
-        });
-
-        const data = await response.json();
-        document.getElementById('summaryResult').textContent = JSON.stringify(data, null, 2);
+        try {
+          const data = await request('/zybooks', { text });
+          setResult('summaryResult', `<h3>Summary</h3><p>${escapeHtml(data.summary).replaceAll('\n', '<br />')}</p><h3>Key concepts</h3><ul>${data.key_concepts.map(concept => `<li>${escapeHtml(concept)}</li>`).join('')}</ul>`);
+        } catch (error) {
+          setResult('summaryResult', escapeHtml(error.message), true);
+        }
       }
 
       async function generateWeeklyPlan() {
@@ -104,14 +146,23 @@
         const goal = document.getElementById('weeklyGoal').value;
         const days = Number(document.getElementById('weeklyDays').value);
 
-        const response = await fetch('/weekly-plan', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ course, goal, days })
-        });
+        try {
+          const data = await request('/weekly-plan', { course, goal, days });
+          setResult('weeklyPlanResult', `<h3>${escapeHtml(data.course)}</h3><ol>${data.schedule.map(item => `<li><strong>${escapeHtml(item.day)}</strong><span>${escapeHtml(item.task)}</span></li>`).join('')}</ol>`);
+        } catch (error) {
+          setResult('weeklyPlanResult', escapeHtml(error.message), true);
+        }
+      }
 
-        const data = await response.json();
-        document.getElementById('weeklyPlanResult').textContent = JSON.stringify(data, null, 2);
+      async function generateQuiz() {
+        const topic = document.getElementById('quizTopic').value;
+        const questions = Number(document.getElementById('quizQuestions').value);
+        try {
+          const data = await request('/quiz', { topic, questions });
+          setResult('quizResult', `<h3>${escapeHtml(data.topic)} quiz</h3>${data.questions.map((question, index) => `<details><summary>${index + 1}. ${escapeHtml(question.question)}</summary><p><strong>Answer:</strong> ${escapeHtml(question.answer)}</p></details>`).join('')}`);
+        } catch (error) {
+          setResult('quizResult', escapeHtml(error.message), true);
+        }
       }
     </script>
   </body>
