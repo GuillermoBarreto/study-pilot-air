@@ -12,7 +12,7 @@ A practical study companion for students who want a clearer way to organize clas
 
 ![Study Pilot Air](https://dummyimage.com/1200x600/0f172a/ffffff&text=Study+Pilot+Air)
 
-## Why Study Pilot Air??
+## Why Study Pilot Air?
 
 Studying shouldn't mean juggling multiple apps, notes, and AI tools.
 
