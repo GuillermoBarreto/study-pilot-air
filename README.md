@@ -119,6 +119,3 @@ This project is designed to grow into a practical study companion for college st
 
 This project is the intellectual property of Guillermo Barreto. All rights reserved.
 See [LICENSE](LICENSE) and [NOTICE](NOTICE) for details.
-
-
-including AI
