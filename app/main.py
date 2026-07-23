@@ -9,7 +9,7 @@ from app.ai_helper import StudyAI, string_list
 from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
 
-app = FastAPI(title="Study Pilot")
+app = FastAPI(title="Study Pilot Air")
 helper = ZyBooksHelper()
 ai = StudyAI()
 INDEX_HTML = Path(__file__).resolve().parent.parent / "templates" / "index.html"
