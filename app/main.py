@@ -9,9 +9,40 @@ from app.ai_helper import StudyAI, string_list
 from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
 
+tags_metadata = [
+    {
+        "name": "System",
+        "description": "System health and API information.",
+    },
+    {
+        "name": "Courses",
+        "description": "Browse available WGU courses.",
+    },
+    {
+        "name": "Study Plans",
+        "description": "Generate personalized study plans.",
+    },
+    {
+        "name": "Quiz",
+        "description": "Generate AI-powered quizzes.",
+    },
+    {
+        "name": "Course Guidance",
+        "description": "Get AI study recommendations.",
+    },
+    {
+        "name": "Weekly Planner",
+        "description": "Create weekly study schedules.",
+    },
+    {
+        "name": "ZyBooks",
+        "description": "Summarize course readings and generate review questions.",
+    },
+]
+
 app = FastAPI(
     title="Study Pilot Air",
-    description="AI-powered study assistant for personalized learning, quizzes, and study planning.",
+    description="🚀 AI-powered study assistant for personalized learning, quizzes, summaries, and study planning.",
     version="1.0.0",
     contact={
         "name": "Guillermo Barreto",
@@ -20,8 +51,8 @@ app = FastAPI(
     license_info={
         "name": "MIT",
     },
+    openapi_tags=tags_metadata,
 )
-
 
 class StudyPlanRequest(BaseModel):
     topic: str = Field(..., min_length=1)
@@ -114,6 +145,23 @@ def get_courses():
 def get_static(filename: str):
     return FileResponse(STATIC_DIR / filename)
 
+@app.get("/health", tags=["System"])
+def health():
+    return {
+        "status": "healthy",
+        "service": "Study Pilot Air",
+        "version": "1.0.0",
+    }
+
+
+@app.get("/api/info", tags=["System"])
+def api_info():
+    return {
+        "name": "Study Pilot Air",
+        "version": "1.0.0",
+        "author": "Guillermo Barreto",
+        "description": "AI-powered study assistant",
+    }
 
 @app.post("/study-plan", response_model=StudyPlanResponse)
 def generate_study_plan(request: StudyPlanRequest):
