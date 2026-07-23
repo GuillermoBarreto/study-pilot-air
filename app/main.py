@@ -9,11 +9,18 @@ from app.ai_helper import StudyAI, string_list
 from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
 
-app = FastAPI(title="Study Pilot Air")
-helper = ZyBooksHelper()
-ai = StudyAI()
-INDEX_HTML = Path(__file__).resolve().parent.parent / "templates" / "index.html"
-STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
+app = FastAPI(
+    title="Study Pilot Air",
+    description="AI-powered study assistant for personalized learning, quizzes, and study planning.",
+    version="1.0.0",
+    contact={
+        "name": "Guillermo Barreto",
+        "url": "https://github.com/GuillermoBarreto",
+    },
+    license_info={
+        "name": "MIT",
+    },
+)
 
 
 class StudyPlanRequest(BaseModel):
