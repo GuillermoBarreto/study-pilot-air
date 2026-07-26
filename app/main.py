@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 from typing import List
 
 from fastapi import FastAPI
@@ -8,6 +9,12 @@ from pydantic import BaseModel, Field
 from app.ai_helper import StudyAI, string_list
 from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
+
+PROJECT_DIR = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent.parent))
+INDEX_HTML = PROJECT_DIR / "templates" / "index.html"
+STATIC_DIR = PROJECT_DIR / "static"
+ai = StudyAI()
+helper = ZyBooksHelper()
 
 tags_metadata = [
     {
@@ -49,15 +56,15 @@ app = FastAPI(
         "url": "https://github.com/GuillermoBarreto",
     },
     license_info={
-        "name": "MIT",
+        "name": "Proprietary — all rights reserved",
     },
     openapi_tags=tags_metadata,
 )
 
 class StudyPlanRequest(BaseModel):
-    topic: str = Field(..., min_length=1)
-    days: int = Field(..., gt=0)
-    hours_per_day: int = Field(..., gt=0)
+    topic: str = Field(..., min_length=1, max_length=200)
+    days: int = Field(..., gt=0, le=14)
+    hours_per_day: int = Field(..., gt=0, le=12)
 
 
 class StudyDay(BaseModel):
@@ -79,8 +86,8 @@ class QuizQuestion(BaseModel):
 
 
 class QuizRequest(BaseModel):
-    topic: str = Field(..., min_length=1)
-    questions: int = Field(..., gt=0)
+    topic: str = Field(..., min_length=1, max_length=200)
+    questions: int = Field(..., gt=0, le=10)
 
 
 class QuizResponse(BaseModel):
@@ -89,8 +96,8 @@ class QuizResponse(BaseModel):
 
 
 class CourseGuidanceRequest(BaseModel):
-    course: str = Field(..., min_length=1)
-    topic: str = Field(..., min_length=1)
+    course: str = Field(..., min_length=1, max_length=120)
+    topic: str = Field(..., min_length=1, max_length=200)
 
 
 class CourseGuidanceResponse(BaseModel):
@@ -100,9 +107,9 @@ class CourseGuidanceResponse(BaseModel):
 
 
 class WeeklyPlanRequest(BaseModel):
-    course: str = Field(..., min_length=1)
-    goal: str = Field(..., min_length=1)
-    days: int = Field(..., gt=0)
+    course: str = Field(..., min_length=1, max_length=120)
+    goal: str = Field(..., min_length=1, max_length=400)
+    days: int = Field(..., gt=0, le=7)
 
 
 class WeeklyPlanItem(BaseModel):

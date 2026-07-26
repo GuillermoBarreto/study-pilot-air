@@ -35,6 +35,15 @@ def test_rejects_invalid_days():
     assert response.status_code == 422
 
 
+def test_rejects_study_plan_above_limit():
+    response = client.post(
+        "/study-plan",
+        json={"topic": "Python Basics", "days": 15, "hours_per_day": 2},
+    )
+
+    assert response.status_code == 422
+
+
 def test_generate_quiz():
     response = client.post(
         "/quiz",
@@ -46,6 +55,12 @@ def test_generate_quiz():
     assert data["topic"] == "Python Basics"
     assert len(data["questions"]) == 2
     assert data["questions"][0]["answer"] in data["questions"][0]["options"]
+
+
+def test_rejects_quiz_above_limit():
+    response = client.post("/quiz", json={"topic": "Python Basics", "questions": 11})
+
+    assert response.status_code == 422
 
 
 def test_generate_quiz_uses_valid_ai_response(monkeypatch):

@@ -51,6 +51,15 @@
         </div>
       </div>
 
+      <div class="card" style="margin-top: 1rem;">
+        <h2>Get course guidance</h2>
+        <p class="card-copy">Get a few practical next steps for a specific course topic.</p>
+        <input id="guidanceCourse" placeholder="Course" value="CS 101" />
+        <input id="guidanceTopic" placeholder="Topic" value="Functions" />
+        <button onclick="generateCourseGuidance()">Get guidance</button>
+        <div class="result" id="guidanceResult" aria-live="polite"></div>
+      </div>
+
       <div class="grid" style="margin-top: 1rem;">
         <div class="card">
           <h2>Summarize ZyBooks content</h2>
@@ -151,6 +160,17 @@
           setResult('weeklyPlanResult', `<h3>${escapeHtml(data.course)}</h3><ol>${data.schedule.map(item => `<li><strong>${escapeHtml(item.day)}</strong><span>${escapeHtml(item.task)}</span></li>`).join('')}</ol>`);
         } catch (error) {
           setResult('weeklyPlanResult', escapeHtml(error.message), true);
+        }
+      }
+
+      async function generateCourseGuidance() {
+        const course = document.getElementById('guidanceCourse').value;
+        const topic = document.getElementById('guidanceTopic').value;
+        try {
+          const data = await request('/course-guidance', { course, topic });
+          setResult('guidanceResult', `<h3>${escapeHtml(data.course)} · ${escapeHtml(data.topic)}</h3><ul>${data.study_tips.map(tip => `<li>${escapeHtml(tip)}</li>`).join('')}</ul>`);
+        } catch (error) {
+          setResult('guidanceResult', escapeHtml(error.message), true);
         }
       }
 

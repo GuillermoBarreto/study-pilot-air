@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Framework-009688?logo=fastapi)
-![License](https://img.shields.io/badge/License-Custom-lightgrey)
+![License](https://img.shields.io/badge/License-Proprietary-lightgrey)
 ![Status](https://img.shields.io/badge/Status-In%20Development-success)
 
 A practical study companion for students who want a clearer way to organize classes, prepare for quizzes, and make dense reading material easier to work through.
@@ -47,6 +47,10 @@ The goal is to help students spend less time organizing and more time learning.
 
 ## Run locally
 
+Study Pilot Air is proprietary software. Viewing this repository does not grant
+permission to run, copy, modify, or distribute it. Request written authorization
+from the copyright holder before using the source code.
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
@@ -83,6 +87,15 @@ manager rather than placing it in a source file or browser code.
 ```bash
 ./run.sh
 ```
+
+## Desktop releases
+
+Authorized desktop releases are published for Windows, macOS, and Linux from
+the [GitHub Releases page](https://github.com/GuillermoBarreto/study-pilot-air/releases).
+The `Desktop builds` workflow creates the three platform binaries when a version
+tag such as `v1.0.0` is pushed. The project download page links to the latest
+release; enable GitHub Pages with **GitHub Actions** as its source in the
+repository settings after merging the workflow to `main`.
 
 ## Test
 
