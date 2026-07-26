@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 from typing import List
 
 from fastapi import FastAPI
@@ -9,7 +10,7 @@ from app.ai_helper import StudyAI, string_list
 from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
 
-PROJECT_DIR = Path(__file__).resolve().parent.parent
+PROJECT_DIR = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent.parent))
 INDEX_HTML = PROJECT_DIR / "templates" / "index.html"
 STATIC_DIR = PROJECT_DIR / "static"
 ai = StudyAI()
@@ -55,7 +56,7 @@ app = FastAPI(
         "url": "https://github.com/GuillermoBarreto",
     },
     license_info={
-        "name": "MIT",
+        "name": "Proprietary — all rights reserved",
     },
     openapi_tags=tags_metadata,
 )
