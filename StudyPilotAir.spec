@@ -24,8 +24,6 @@ pyz = PYZ(analysis.pure)
 exe = EXE(
     pyz,
     analysis.scripts,
-    analysis.binaries,
-    analysis.datas,
     [],
     name="StudyPilotAir",
     debug=False,
@@ -33,4 +31,14 @@ exe = EXE(
     strip=False,
     upx=True,
     console=False,
+    exclude_binaries=True,
+)
+
+coll = COLLECT(
+    exe,
+    analysis.binaries,
+    analysis.datas,
+    strip=False,
+    upx=True,
+    name="StudyPilotAir",
 )

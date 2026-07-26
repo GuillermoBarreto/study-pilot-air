@@ -97,6 +97,9 @@ tag such as `v1.0.0` is pushed. The project download page links to the latest
 release; enable GitHub Pages with **GitHub Actions** as its source in the
 repository settings after merging the workflow to `main`.
 
+Each download is a desktop app folder. Keep its contents together and open the
+`StudyPilotAir` executable inside it.
+
 ## Test
 
 ```bash
