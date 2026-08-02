@@ -4,18 +4,21 @@ import os
 from hashlib import sha256
 from threading import Lock
 from time import monotonic
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
-from openai import OpenAI
+try:
+    from openai import OpenAI
+except Exception:  # pragma: no cover - optional dependency in tests
+    OpenAI = None  # type: ignore
 
 
 class StudyAI:
     """Server-side OpenAI wrapper for Study Pilot features."""
 
     def __init__(self) -> None:
-        self._client: Optional[OpenAI] = None
+        self._client: Optional[Any] = None
         self.model = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
-        self._cache: Dict[str, tuple[float, Dict[str, Any]]] = {}
+        self._cache: Dict[str, Tuple[float, Dict[str, Any]]] = {}
         self._cache_lock = Lock()
         self._cache_ttl_seconds = max(0, int(os.getenv("STUDY_AI_CACHE_TTL_SECONDS", "300")))
         self._cache_max_entries = max(1, int(os.getenv("STUDY_AI_CACHE_MAX_ENTRIES", "128")))
