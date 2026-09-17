@@ -34,18 +34,18 @@
       <div class="grid" style="margin-top: 1rem;">
         <div class="card">
           <h2>Generate a study plan</h2>
-          <input id="topic" placeholder="Topic" value="Functions" />
-          <input id="days" type="number" placeholder="Days" value="3" />
-          <input id="hours" type="number" placeholder="Hours per day" value="2" />
+          <input id="topic" aria-label="Study topic" placeholder="Topic" value="Functions" />
+          <input id="days" aria-label="Study days" type="number" placeholder="Days" value="3" />
+          <input id="hours" aria-label="Hours per day" type="number" placeholder="Hours per day" value="2" />
           <button onclick="generatePlan()">Generate plan</button>
           <div class="result" id="planResult" aria-live="polite"></div>
         </div>
 
         <div class="card">
           <h2>Build a weekly plan</h2>
-          <input id="weeklyCourse" placeholder="Course" value="CS 101" />
-          <input id="weeklyGoal" placeholder="Goal" value="Prepare for midterms" />
-          <input id="weeklyDays" type="number" placeholder="Days" value="3" />
+          <input id="weeklyCourse" aria-label="Weekly plan course" placeholder="Course" value="CS 101" />
+          <input id="weeklyGoal" aria-label="Weekly study goal" placeholder="Goal" value="Prepare for midterms" />
+          <input id="weeklyDays" aria-label="Weekly study days" type="number" placeholder="Days" value="3" />
           <button onclick="generateWeeklyPlan()">Create plan</button>
           <div class="result" id="weeklyPlanResult" aria-live="polite"></div>
         </div>
@@ -54,8 +54,8 @@
       <div class="card" style="margin-top: 1rem;">
         <h2>Get course guidance</h2>
         <p class="card-copy">Get a few practical next steps for a specific course topic.</p>
-        <input id="guidanceCourse" placeholder="Course" value="CS 101" />
-        <input id="guidanceTopic" placeholder="Topic" value="Functions" />
+        <input id="guidanceCourse" aria-label="Course for guidance" placeholder="Course" value="CS 101" />
+        <input id="guidanceTopic" aria-label="Topic for guidance" placeholder="Topic" value="Functions" />
         <button onclick="generateCourseGuidance()">Get guidance</button>
         <div class="result" id="guidanceResult" aria-live="polite"></div>
       </div>
@@ -63,7 +63,7 @@
       <div class="grid" style="margin-top: 1rem;">
         <div class="card">
           <h2>Summarize ZyBooks content</h2>
-          <textarea id="zybookText" rows="8" placeholder="Paste chapter text here..."></textarea>
+          <textarea id="zybookText" aria-label="Chapter text to summarize" rows="8" placeholder="Paste chapter text here..."></textarea>
           <button onclick="summarizeText()">Summarize</button>
           <div class="result" id="summaryResult" aria-live="polite"></div>
         </div>
@@ -71,8 +71,8 @@
         <div class="card">
           <h2>Practice with a quiz</h2>
           <p class="card-copy">Build a short set of questions for any topic.</p>
-          <input id="quizTopic" placeholder="Topic" value="Functions" />
-          <input id="quizQuestions" type="number" min="1" max="10" placeholder="Number of questions" value="3" />
+          <input id="quizTopic" aria-label="Quiz topic" placeholder="Topic" value="Functions" />
+          <input id="quizQuestions" aria-label="Number of quiz questions" type="number" min="1" max="10" placeholder="Number of questions" value="3" />
           <button onclick="generateQuiz()">Generate quiz</button>
           <div class="result" id="quizResult" aria-live="polite"></div>
         </div>
