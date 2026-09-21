@@ -2,7 +2,7 @@ from pathlib import Path
 import sys
 from typing import List
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
@@ -150,7 +150,13 @@ def get_courses():
 
 @app.get("/static/{filename}")
 def get_static(filename: str):
-    return FileResponse(STATIC_DIR / filename)
+    # Block path traversal so only files inside STATIC_DIR can be served.
+    resolved = (STATIC_DIR / filename).resolve()
+    if STATIC_DIR.resolve() not in resolved.parents:
+        raise HTTPException(status_code=404, detail="Not found")
+    if not resolved.is_file():
+        raise HTTPException(status_code=404, detail="Not found")
+    return FileResponse(resolved)
 
 @app.get("/health", tags=["System"])
 def health():
