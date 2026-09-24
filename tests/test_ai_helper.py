@@ -1,4 +1,4 @@
-from app.ai_helper import StudyAI
+from app.ai_helper import StudyAI, string_list
 
 
 def test_generate_json_reuses_recent_matching_result(monkeypatch):
@@ -36,3 +36,18 @@ def test_cached_result_cannot_be_mutated_by_a_caller(monkeypatch):
     result["result"] = "changed"
 
     assert study_ai.generate_json("Make JSON", "Functions") == {"result": "original"}
+
+
+def test_string_list_filters_blank_and_non_string_items():
+    assert string_list([" a ", "", "  ", 42, None, "b"], limit=8) == ["a", "b"]
+
+
+def test_string_list_respects_limit():
+    assert string_list(["a", "b", "c"], limit=2) == ["a", "b"]
+
+
+def test_string_list_rejects_non_list_and_non_positive_limit():
+    assert string_list("not-a-list") is None
+    assert string_list(None) is None
+    assert string_list(["a"], limit=0) is None
+    assert string_list(["a", "b"], limit=-1) is None
