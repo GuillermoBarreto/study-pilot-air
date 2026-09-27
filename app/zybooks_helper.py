@@ -2,7 +2,11 @@ from typing import List
 
 
 class ZyBooksHelper:
+    """Turns raw ZyBooks chapter text into summaries, concepts, and questions."""
+
     def summarize_text(self, text: str) -> str:
+        if not isinstance(text, str):
+            text = ""
         paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
         if not paragraphs:
             return "No content available."
@@ -18,6 +22,8 @@ class ZyBooksHelper:
         return "\n".join(f"- {point}" for point in summary_points)
 
     def extract_key_concepts(self, text: str) -> List[str]:
+        if not isinstance(text, str):
+            text = ""
         concepts = []
         seen = set()
         for line in text.splitlines():
