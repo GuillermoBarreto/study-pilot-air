@@ -12,6 +12,14 @@ except Exception:  # pragma: no cover - optional dependency in tests
     OpenAI = None  # type: ignore
 
 
+def _env_int(name: str, default: int) -> int:
+    """Read an int env var, falling back to ``default`` when unset or invalid."""
+    try:
+        return int(os.getenv(name, str(default)))
+    except (TypeError, ValueError):
+        return default
+
+
 class StudyAI:
     """Server-side OpenAI wrapper for Study Pilot features."""
 
@@ -20,8 +28,8 @@ class StudyAI:
         self.model = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
         self._cache: Dict[str, Tuple[float, Dict[str, Any]]] = {}
         self._cache_lock = Lock()
-        self._cache_ttl_seconds = max(0, int(os.getenv("STUDY_AI_CACHE_TTL_SECONDS", "300")))
-        self._cache_max_entries = max(1, int(os.getenv("STUDY_AI_CACHE_MAX_ENTRIES", "128")))
+        self._cache_ttl_seconds = max(0, _env_int("STUDY_AI_CACHE_TTL_SECONDS", 300))
+        self._cache_max_entries = max(1, _env_int("STUDY_AI_CACHE_MAX_ENTRIES", 128))
 
     @property
     def is_configured(self) -> bool:
