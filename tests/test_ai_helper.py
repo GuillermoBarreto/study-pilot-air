@@ -51,3 +51,21 @@ def test_string_list_rejects_non_list_and_non_positive_limit():
     assert string_list(None) is None
     assert string_list(["a"], limit=0) is None
     assert string_list(["a", "b"], limit=-1) is None
+
+
+def test_study_ai_falls_back_to_default_cache_settings_for_invalid_env(monkeypatch):
+    monkeypatch.setenv("STUDY_AI_CACHE_TTL_SECONDS", "not-a-number")
+    monkeypatch.setenv("STUDY_AI_CACHE_MAX_ENTRIES", "also-bad")
+    study_ai = StudyAI()
+
+    assert study_ai._cache_ttl_seconds == 300
+    assert study_ai._cache_max_entries == 128
+
+
+def test_study_ai_clamps_negative_cache_settings(monkeypatch):
+    monkeypatch.setenv("STUDY_AI_CACHE_TTL_SECONDS", "-5")
+    monkeypatch.setenv("STUDY_AI_CACHE_MAX_ENTRIES", "-3")
+    study_ai = StudyAI()
+
+    assert study_ai._cache_ttl_seconds == 0  # TTL 0 disables the cache
+    assert study_ai._cache_max_entries == 1  # at least one cache entry
