@@ -1,3 +1,4 @@
+from random import shuffle
 from typing import List
 
 
@@ -44,7 +45,7 @@ class ZyBooksHelper:
         return concepts[:8]
 
     def generate_quick_questions(self, topic: str) -> List[dict]:
-        return [
+        questions = [
             {
                 "question": f"What is the main idea of {topic}?",
                 "answer": "Core concept",
@@ -56,3 +57,7 @@ class ZyBooksHelper:
                 "options": ["Core concept", "Key definition", "Real-world example"],
             },
         ]
+        for question in questions:
+            # Shuffle so the correct answer is not always the first option.
+            shuffle(question["options"])
+        return questions
