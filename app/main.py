@@ -233,21 +233,27 @@ def generate_quiz(request: QuizRequest):
         except (TypeError, ValueError):
             pass
 
-    return QuizResponse(
-        topic=request.topic,
-        questions=[
+    fallback_templates = [
+        ("What is the main idea of {topic}?", "Core concept"),
+        ("Which of these is a key definition related to {topic}?", "Key definition"),
+        ("How would you apply {topic} to a real-world example?", "Real-world example"),
+    ]
+    fallback_options = ["Core concept", "Key definition", "Real-world example"]
+
+    questions = []
+    for index in range(request.questions):
+        # Rotate through distinct fallback questions instead of repeating
+        # the same one for every requested question.
+        template, answer = fallback_templates[index % len(fallback_templates)]
+        questions.append(
             QuizQuestion(
-                question=f"What is the main idea of {request.topic}?",
-                answer="Core concept",
-                options=[
-                    "Core concept",
-                    "Key definition",
-                    "Real-world example",
-                ],
+                question=template.format(topic=request.topic),
+                answer=answer,
+                options=list(fallback_options),
             )
-            for _ in range(request.questions)
-        ],
-    )
+        )
+
+    return QuizResponse(topic=request.topic, questions=questions)
 
 
 @app.post("/course-guidance", response_model=CourseGuidanceResponse)
