@@ -42,6 +42,8 @@ class ZyBooksHelper:
                     if candidate not in seen:
                         concepts.append(candidate)
                         seen.add(candidate)
+                        if len(concepts) >= 8:
+                            break
         return concepts[:8]
 
     def generate_quick_questions(self, topic: str) -> List[dict]:
