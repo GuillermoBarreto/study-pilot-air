@@ -45,6 +45,8 @@ class ZyBooksHelper:
         return concepts[:8]
 
     def generate_quick_questions(self, topic: str) -> List[dict]:
+        if not isinstance(topic, str):
+            topic = ""
         questions = [
             {
                 "question": f"What is the main idea of {topic}?",
