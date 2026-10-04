@@ -28,3 +28,15 @@ def test_zybooks_helper_handles_non_string_text():
     assert helper.summarize_text(123) == "No content available."
     assert helper.extract_key_concepts(None) == []
     assert helper.extract_key_concepts(123) == []
+
+
+def test_generate_quick_questions_handles_non_string_topic():
+    from app.zybooks_helper import ZyBooksHelper
+
+    helper = ZyBooksHelper()
+    for bad_topic in (None, 123):
+        questions = helper.generate_quick_questions(bad_topic)
+        assert len(questions) == 2
+        for question in questions:
+            assert "None" not in question["question"]
+            assert question["answer"] in question["options"]
