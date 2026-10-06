@@ -10,6 +10,8 @@ from app.ai_helper import StudyAI, string_list
 from app.data import COURSES
 from app.zybooks_helper import ZyBooksHelper
 
+APP_VERSION = "1.0.0"
+
 PROJECT_DIR = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent.parent))
 INDEX_HTML = PROJECT_DIR / "templates" / "index.html"
 STATIC_DIR = PROJECT_DIR / "static"
@@ -50,7 +52,7 @@ tags_metadata = [
 app = FastAPI(
     title="Study Pilot Air",
     description="🚀 AI-powered study assistant for personalized learning, quizzes, summaries, and study planning.",
-    version="1.0.0",
+    version=APP_VERSION,
     contact={
         "name": "Guillermo Barreto",
         "url": "https://github.com/GuillermoBarreto",
@@ -163,7 +165,7 @@ def health():
     return {
         "status": "healthy",
         "service": "Study Pilot Air",
-        "version": "1.0.0",
+        "version": APP_VERSION,
     }
 
 
@@ -171,7 +173,7 @@ def health():
 def api_info():
     return {
         "name": "Study Pilot Air",
-        "version": "1.0.0",
+        "version": APP_VERSION,
         "author": "Guillermo Barreto",
         "description": "AI-powered study assistant",
     }
