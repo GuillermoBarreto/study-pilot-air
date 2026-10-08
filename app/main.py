@@ -166,6 +166,9 @@ def health():
         "status": "healthy",
         "service": "Study Pilot Air",
         "version": APP_VERSION,
+        # Lets dashboards tell at a glance whether AI features are live or
+        # the app is running on fallbacks (OPENAI_API_KEY unset).
+        "ai_enabled": ai.is_configured,
     }
 
 
@@ -196,10 +199,12 @@ def generate_study_plan(request: StudyPlanRequest):
         except (TypeError, ValueError):
             pass
 
+    # Fallback focuses stay topic-neutral: when AI is unavailable this path
+    # serves any subject, not just programming.
     focuses = [
-        "Core syntax and variables",
-        "Control flow and functions",
-        "Practice problems and review",
+        "Read the assigned material and list the main ideas",
+        "Work through one practice problem step by step",
+        "Summarize the topic in your own words",
     ]
 
     days = []
