@@ -196,10 +196,12 @@ def generate_study_plan(request: StudyPlanRequest):
         except (TypeError, ValueError):
             pass
 
+    # Fallback focuses stay topic-neutral: when AI is unavailable this path
+    # serves any subject, not just programming.
     focuses = [
-        "Core syntax and variables",
-        "Control flow and functions",
-        "Practice problems and review",
+        "Read the assigned material and list the main ideas",
+        "Work through one practice problem step by step",
+        "Summarize the topic in your own words",
     ]
 
     days = []
