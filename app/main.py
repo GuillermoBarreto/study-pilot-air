@@ -166,6 +166,9 @@ def health():
         "status": "healthy",
         "service": "Study Pilot Air",
         "version": APP_VERSION,
+        # Lets dashboards tell at a glance whether AI features are live or
+        # the app is running on fallbacks (OPENAI_API_KEY unset).
+        "ai_enabled": ai.is_configured,
     }
 
 
