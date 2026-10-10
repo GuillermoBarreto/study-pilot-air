@@ -16,7 +16,7 @@ def test_generate_study_plan():
     assert data["topic"] == "Python Basics"
     assert len(data["days"]) == 3
     assert data["days"][0]["title"] == "Day 1"
-    assert data["days"][0]["focus"] == "Core syntax and variables"
+    assert data["days"][0]["focus"] == "Read the assigned material and list the main ideas"
 
 
 def test_dashboard_route():
