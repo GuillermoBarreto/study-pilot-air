@@ -112,3 +112,21 @@ def test_generate_weekly_plan():
     assert data["goal"] == "Prepare for midterms"
     assert len(data["schedule"]) == 3
     assert data["schedule"][0]["task"].startswith("Review")
+
+
+def test_static_serves_existing_file():
+    response = client.get("/static/app.css")
+
+    assert response.status_code == 200
+
+
+def test_static_404_for_missing_file():
+    response = client.get("/static/does-not-exist.css")
+
+    assert response.status_code == 404
+
+
+def test_static_blocks_path_traversal():
+    response = client.get("/static/..%2Ftemplates%2Findex.html")
+
+    assert response.status_code == 404
