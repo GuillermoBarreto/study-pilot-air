@@ -214,7 +214,7 @@ def generate_study_plan(request: StudyPlanRequest):
             StudyDay(
                 title=f"Day {index + 1}",
                 focus=focus,
-                goal=f"Spend {request.hours_per_day} hours learning {focus.lower()} for {request.topic}",
+                goal=f"Spend {request.hours_per_day} hours on \"{focus}\" ({request.topic})",
             )
         )
 
