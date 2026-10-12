@@ -6,6 +6,11 @@ class ZyBooksHelper:
     """Turns raw ZyBooks chapter text into summaries, concepts, and questions."""
 
     def summarize_text(self, text: str) -> str:
+        """Return up to 4 bullet points summarizing the given chapter text.
+
+        Long paragraphs are truncated to their first 20 words; an empty or
+        non-string input yields "No content available."
+        """
         if not isinstance(text, str):
             text = ""
         paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
@@ -23,6 +28,11 @@ class ZyBooksHelper:
         return "\n".join(f"- {point}" for point in summary_points)
 
     def extract_key_concepts(self, text: str) -> List[str]:
+        """Extract up to 8 key concepts from chapter text.
+
+        Prefers short capitalized headings; falls back to short sentences when
+        no headings are found. Duplicates are removed, order is preserved.
+        """
         if not isinstance(text, str):
             text = ""
         concepts = []
@@ -47,6 +57,11 @@ class ZyBooksHelper:
         return concepts[:8]
 
     def generate_quick_questions(self, topic: str) -> List[dict]:
+        """Build two multiple-choice review questions for ``topic``.
+
+        Option order is shuffled so the correct answer is not always first.
+        Each question dict has "question", "answer", and "options" keys.
+        """
         if not isinstance(topic, str):
             topic = ""
         questions = [
